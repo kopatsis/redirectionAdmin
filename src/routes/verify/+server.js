@@ -11,13 +11,15 @@ export async function load({ url }) {
     }
 
     try {
+        const apiKey = process.env.API_KEY;
         const email = await checkActionCode(auth, oobCode);
         await applyActionCode(auth, oobCode);
 
-        const response = await fetch('https://backendapi.i9fit.co/verify', {
+        const response = await fetch('https://adminapi.i9fit.co/verify', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'X-API-KEY': apiKey,
             },
             body: JSON.stringify({ email })
         });
