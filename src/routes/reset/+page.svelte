@@ -30,7 +30,7 @@
 			try {
 				processing = true;
 				await confirmPasswordReset(auth, oobCode, newPassword);
-				message = 'Password successfully updated. You can now log in with your new password.';
+				message = 'Password successfully updated.';
 				newPassword = '';
 				confirmPassword = '';
 			} catch (error) {
