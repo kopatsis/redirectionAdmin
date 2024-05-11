@@ -12,6 +12,7 @@ export async function load({ url }) {
 
     try {
         const email = await verifyPasswordResetCode(auth, oobCode);
+        console.log(email)
         return { props: { email, oobCode } };
     } catch (error) {
         return { status: 400, error: error.message };

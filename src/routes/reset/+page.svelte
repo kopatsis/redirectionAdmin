@@ -5,10 +5,25 @@
 	export let email;
 	export let oobCode;
 
-	let newPassword = '';
+	let password = '';
 	let confirmPassword = '';
 	let message = '';
 	let processing = false;
+
+    let isValidPassword = false;
+    let passwordsMatch = false;
+    let hasMinimumLength = false;
+    let containsLetter = false;
+    let containsNumber = false;
+
+    let lengthMessage = '';
+    let letterMessage = '';
+    let numberMessage = '';
+    let matchMessage = '';
+
+    $: hasMinimumLength = password.length >= 10;
+	$: containsLetter = /[a-zA-Z]/.test(password);
+	$: containsNumber = /\d/.test(password);
 
 	$: isValidPassword = hasMinimumLength && containsLetter && containsNumber;
 
@@ -29,9 +44,9 @@
 		if (isValidPassword && passwordsMatch) {
 			try {
 				processing = true;
-				await confirmPasswordReset(auth, oobCode, newPassword);
+				await confirmPasswordReset(auth, oobCode, password);
 				message = 'Password successfully updated.';
-				newPassword = '';
+				password = '';
 				confirmPassword = '';
 			} catch (error) {
 				message = `Failed to update password: ${error.message}`;
@@ -48,7 +63,7 @@
 
 	<div class="form-group">
 		<label for="new-password">New Password:</label>
-		<input id="new-password" type="password" bind:value={newPassword} required />
+		<input id="new-password" type="password" bind:value={password} required />
 	</div>
 
     <p>{lengthMessage}</p>
