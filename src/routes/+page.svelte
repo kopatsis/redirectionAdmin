@@ -88,6 +88,7 @@
 		if (!oobCode && !mode) {
 			noParams = true;
 			loading = false;
+			return;
 		}
 
 		if ((mode !== 'resetPassword' && mode !== 'verifyEmail') || !oobCode) {
