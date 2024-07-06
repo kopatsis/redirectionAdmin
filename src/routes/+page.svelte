@@ -12,6 +12,7 @@
 
 	let mainError = null;
 	let noParams = false;
+	let verified = false;
 
 	let loading = true;
 	let email = '';
@@ -73,6 +74,7 @@
 		try {
 			const email = await checkActionCode(auth, oobCode);
 			await applyActionCode(auth, oobCode);
+			verified = true;
 		} catch (error) {
 			mainError = error;
 		} finally {
@@ -119,6 +121,9 @@
 	<h1>Hello</h1>
 	<div>If you are looking for the actual i9 Admin Panel:</div>
 	<button><a href="https://seashell-app-t8qro.ondigitalocean.app/">Admin Panel</a></button>
+{:else if verified}
+	<h1>You verified your email</h1>
+	<div>Yay!</div>
 {:else if mainError}
 	<div>Huge fucking error: {mainError}</div>
 {:else if modeVerified}
