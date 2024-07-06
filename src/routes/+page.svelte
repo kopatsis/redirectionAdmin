@@ -11,6 +11,8 @@
 	let oobCode;
 
 	let mainError = null;
+	let noParams = false;
+
 	let loading = true;
 	let email = '';
 	let mode = '';
@@ -83,6 +85,11 @@
 		mode = new URLSearchParams(window.location.search).get('mode');
 		console.log(oobCode, mode);
 
+		if (!oobCode && !mode) {
+			noParams = true;
+			loading = false;
+		}
+
 		if ((mode !== 'resetPassword' && mode !== 'verifyEmail') || !oobCode) {
 			mainError = 'wrong params';
 			loading = false;
@@ -107,6 +114,10 @@
 
 {#if loading}
 	<div>loading...</div>
+{:else if noParams}
+	<h1>Hello</h1>
+	<div>If you are looking for the actual i9 Admin Panel:</div>
+	<button><a href="https://seashell-app-t8qro.ondigitalocean.app/">Admin Panel</a></button>
 {:else if mainError}
 	<div>Huge fucking error: {mainError}</div>
 {:else if modeVerified}
