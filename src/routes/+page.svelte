@@ -31,11 +31,6 @@
 	let containsLetter = false;
 	let containsNumber = false;
 
-	let lengthMessage = '';
-	let letterMessage = '';
-	let numberMessage = '';
-	let matchMessage = '';
-
 	function validateEmail(email) {
 		return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 	}
@@ -141,10 +136,12 @@
 			{:else if noParams}
 				<h1>Hello, person</h1>
 				<div>If you are looking for the actual i9 Admin Panel:</div>
-				<button><a href="https://seashell-app-t8qro.ondigitalocean.app">Admin Panel</a></button>
+				<button class="submit"><a href="https://seashell-app-t8qro.ondigitalocean.app">Admin Panel</a></button>
 			{:else if verified}
-				<h1>You verified your email</h1>
+				<div class="logintxt">You verified your email</div>
 				<div>Yay!</div>
+				<div>If you are looking for the Admin Panel:</div>
+				<button class="submit"><a href="https://seashell-app-t8qro.ondigitalocean.app">Admin Panel</a></button>
 			{:else if mainError}
 				<div>Huge fucking error: {mainError}</div>
 			{:else if modeVerified}
@@ -154,8 +151,8 @@
 					<div class="loginouter">
 						<div class="logintxt">Reset Your Password</div>
 						<div>Resetting password for: <strong>{email}</strong></div>
-						<div class="verif">
-							Warning: Please be aware that this will sign you out of ALL devices.
+						<div>
+							&excl;&nbsp;Warning: Please be aware that this will sign you out of ALL devices.
 						</div>
 					</div>
 
@@ -184,10 +181,10 @@
 					</div>
 
 					{#if isValidPassword && passwordsMatch}
-						<button class="submit" on:click|preventDefault={resetPassword}>Sign Up</button>
+						<button class="submit" on:click|preventDefault={resetPassword}>Reset</button>
 						<div class="verif complete">Ready to submit!</div>
 					{:else}
-						<button class="submit" type="button">Sign Up</button>
+						<button class="submit" type="button">Reset</button>
 						<div class="verif">Please complete all required fields</div>
 					{/if}
 
@@ -239,7 +236,7 @@
 	}
 
 	.logintxt {
-		font-size: 48px;
+		font-size: 36px;
 	}
 
 	.loginouter {
@@ -336,5 +333,10 @@
 
 	.verif.complete {
 		color: green;
+	}
+
+	a {
+		text-decoration: none;
+		color: inherit;
 	}
 </style>
