@@ -149,16 +149,16 @@
 			{:else}
 				<form on:submit|preventDefault={resetPassword}>
 					<div class="loginouter">
-						<div class="logintxt">Reset Your Password</div>
-						<div>Resetting password for: <strong>{email}</strong></div>
-						<div>
+						<div class="logintxt head">Reset Your Password</div>
+						<div class="head">Resetting password for: <strong>{email}</strong></div>
+						<div class="head">
 							&excl;&nbsp;Warning: Please be aware that this will sign you out of ALL devices.
 						</div>
 					</div>
 
 					<div class="form-group">
 						<label class="hide" for="new-password">New Password:</label>
-						<input id="new-password" type="password" bind:value={password} required />
+						<input id="new-password" type="password" bind:value={password} placeholder="New Password" required />
 					</div>
 
 					<div class="verif" class:complete={hasMinimumLength}>
@@ -173,7 +173,7 @@
 
 					<div class="form-group">
 						<label class="hide" for="confirm-password">Confirm New Password:</label>
-						<input id="confirm-password" type="password" bind:value={confirmPassword} required />
+						<input id="confirm-password" type="password" bind:value={confirmPassword} placeholder="Confirm Password" required />
 					</div>
 
 					<div class="verif" class:invis={!isValidPassword || passwordsMatch}>
@@ -338,5 +338,10 @@
 	a {
 		text-decoration: none;
 		color: inherit;
+	}
+
+	.head {
+		margin: 5px;
+		text-align: center;
 	}
 </style>
