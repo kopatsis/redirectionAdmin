@@ -46,7 +46,7 @@
 
 	$: lengthMessage = hasMinimumLength
 		? 'Length is sufficient.'
-		: 'Password must be at least 10 characters.';
+		: ';Password must be at least 10 characters.';
 	$: letterMessage = containsLetter
 		? 'Contains at least one letter.'
 		: 'Password must contain at least one letter.';
@@ -155,7 +155,7 @@
 	<form on:submit|preventDefault={resetPassword}>
 		<h1>Reset Your Password</h1>
 		<p>Resetting password for: <strong>{email}</strong></p>
-		<div>Please be aware that this will sign you out of all devices.</div>
+		<div style="color:red;">Warning: Please be aware that this will sign you out of all devices.</div>
 
 		<div class="form-group">
 			<label for="new-password">New Password:</label>
