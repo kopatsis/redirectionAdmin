@@ -60,10 +60,6 @@
 			try {
 				processing = true;
 				await confirmPasswordReset(auth, oobCode, password);
-
-				message = 'Password successfully updated.';
-				password = '';
-				confirmPassword = '';
 			} catch (error) {
 				message = `Failed to update password: ${error.message}`;
 			} finally {
@@ -88,6 +84,9 @@
 				} catch (err) {
 					console.error(err);
 				} finally {
+					message = 'Password successfully updated.';
+					password = '';
+					confirmPassword = '';
 					processing = false;
 				}
 			}
