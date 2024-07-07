@@ -3,7 +3,8 @@
 		confirmPasswordReset,
 		verifyPasswordResetCode,
 		checkActionCode,
-		applyActionCode
+		applyActionCode,
+		signInWithEmailAndPassword
 	} from 'firebase/auth';
 	import { auth } from '$lib/firebase';
 	import { onMount } from 'svelte';
@@ -59,13 +60,36 @@
 			try {
 				processing = true;
 				await confirmPasswordReset(auth, oobCode, password);
+
 				message = 'Password successfully updated.';
 				password = '';
 				confirmPassword = '';
 			} catch (error) {
 				message = `Failed to update password: ${error.message}`;
 			} finally {
-				processing = false;
+				try {
+					await signInWithEmailAndPassword(auth, email, password);
+
+					const user = auth.currentUser;
+					if (user) {
+						const idToken = await user.getIdToken(true);
+						const url = `${import.meta.env.VITE_ADMIN_URL}/resetdate`;
+
+						await fetch(url, {
+							method: 'PATCH',
+							headers: {
+								'Content-Type': 'application/json',
+								Authorization: `Bearer ${idToken}`
+							}
+						});
+
+						await auth.signOut();
+					}
+				} catch (err) {
+					console.error(err);
+				} finally {
+					processing = false;
+				}
 			}
 		}
 	}
@@ -132,6 +156,7 @@
 	<form on:submit|preventDefault={resetPassword}>
 		<h1>Reset Your Password</h1>
 		<p>Resetting password for: <strong>{email}</strong></p>
+		<div>Please be aware that this will sign you out of all devices.</div>
 
 		<div class="form-group">
 			<label for="new-password">New Password:</label>
