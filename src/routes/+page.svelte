@@ -132,20 +132,22 @@
 	<div class="wholepage">
 		<div class="innercontent">
 			{#if loading}
-				<div>loading...</div>
+				<div class="head">loading...</div>
 			{:else if noParams}
-				<h1>Hello, person</h1>
-				<div>If you are looking for the actual i9 Admin Panel:</div>
-				<button class="submit"><a href="https://seashell-app-t8qro.ondigitalocean.app">Admin Panel</a></button>
+				<h1 class="head">Hello, person</h1>
+				<div class="head">If you are looking for the actual i9 Admin Panel:</div>
+				<button class="submit"
+					><a href="https://seashell-app-t8qro.ondigitalocean.app">Admin Panel</a></button
+				>
 			{:else if verified}
-				<div class="logintxt">You verified your email</div>
-				<div>Yay!</div>
-				<div>If you are looking for the Admin Panel:</div>
-				<button class="submit"><a href="https://seashell-app-t8qro.ondigitalocean.app">Admin Panel</a></button>
+				<div class="logintxt head">You verified your email</div>
+				<div class="head">Yay!</div>
+				<div class="head">If you are looking for the Admin Panel:</div>
+				<button class="submit"
+					><a href="https://seashell-app-t8qro.ondigitalocean.app">Admin Panel</a></button
+				>
 			{:else if mainError}
-				<div>Huge fucking error: {mainError}</div>
-			{:else if modeVerified}
-				<div>Nice! Your email has been verified.</div>
+				<div class="head">Something went wrong :/ most likely your code is expired</div>
 			{:else}
 				<form on:submit|preventDefault={resetPassword}>
 					<div class="loginouter">
@@ -158,7 +160,13 @@
 
 					<div class="form-group">
 						<label class="hide" for="new-password">New Password:</label>
-						<input id="new-password" type="password" bind:value={password} placeholder="New Password" required />
+						<input
+							id="new-password"
+							type="password"
+							bind:value={password}
+							placeholder="New Password"
+							required
+						/>
 					</div>
 
 					<div class="verif" class:complete={hasMinimumLength}>
@@ -173,7 +181,13 @@
 
 					<div class="form-group">
 						<label class="hide" for="confirm-password">Confirm New Password:</label>
-						<input id="confirm-password" type="password" bind:value={confirmPassword} placeholder="Confirm Password" required />
+						<input
+							id="confirm-password"
+							type="password"
+							bind:value={confirmPassword}
+							placeholder="Confirm Password"
+							required
+						/>
 					</div>
 
 					<div class="verif" class:invis={!isValidPassword || passwordsMatch}>
@@ -198,7 +212,6 @@
 </div>
 
 <style>
-
 	.centerpage {
 		display: flex;
 		align-items: center;
