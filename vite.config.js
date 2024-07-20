@@ -5,11 +5,8 @@ export default defineConfig({
 	plugins: [sveltekit()],
 	server: {
 		fs: {
-		  strict: true,
-		  allow: [
-			'./static'
-		  ]
+			strict: true,
+			allow: ['./static']
 		}
-	  }
+	}
 });
-

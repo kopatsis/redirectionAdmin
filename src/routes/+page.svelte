@@ -132,8 +132,14 @@
 	<div class="wholepage">
 		<div class="innercontent">
 			{#if loading}
-				<div class="head">loading...</div>
-			{:else if noParams}
+				<div class="loading" id="loader" style="display: none">
+					<div class="bouncer">
+						<img src="/images/i9logotsp.png" alt="sdafa" />
+					</div>
+					<div class="loader2"></div>
+				</div>
+			{/if}
+			{#if noParams}
 				<h1 class="head">Hello, person</h1>
 				<div class="head">If you are looking for the actual i9 Admin Panel:</div>
 				<button class="submit"
@@ -216,7 +222,6 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		display: flex;
 		position: fixed;
 		background-color: rgb(97, 97, 97);
 		width: 100dvw;
@@ -225,12 +230,18 @@
 
 	.wholepage {
 		height: 100dvh;
-		width: min(100dvw, 960px);
+		width: min(100dvw, 750px);
 		box-sizing: border-box;
 		display: flex;
 		flex-direction: column;
 		position: fixed;
-		background: white;
+		background: rgba(236, 241, 243, 0.85);
+		box-shadow:
+			rgba(0, 0, 0, 0.25) 0px 54px 55px,
+			rgba(0, 0, 0, 0.12) 0px -12px 30px,
+			rgba(0, 0, 0, 0.12) 0px 4px 6px,
+			rgba(0, 0, 0, 0.17) 0px 12px 13px,
+			rgba(0, 0, 0, 0.09) 0px -3px 5px;
 	}
 
 	.innercontent {
@@ -356,5 +367,102 @@
 	.head {
 		margin: 5px;
 		text-align: center;
+	}
+
+	.bouncer {
+		padding: 10px;
+		padding-top: 20px;
+	}
+
+	.bouncer img {
+		height: auto;
+		width: clamp(100px, 50dvw, 300px);
+		animation: bounce 0.6s infinite;
+	}
+
+	.loading {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		background-color: rgba(218, 229, 225, 0.85);
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 2000;
+	}
+
+	@keyframes bounce {
+		0%,
+		100% {
+			transform: translateY(0);
+		}
+		50% {
+			transform: translateY(-25px);
+			animation-timing-function: cubic-bezier(0.62, 0.1, 0.62, 1.21);
+		}
+	}
+
+	.loader2 {
+		width: 50px;
+		aspect-ratio: 1;
+		display: grid;
+		border-radius: 50%;
+		background:
+			linear-gradient(0deg, rgb(0 0 0/50%) 30%, #0000 0 70%, rgb(0 0 0/100%) 0) 50%/8% 100%,
+			linear-gradient(90deg, rgb(0 0 0/25%) 30%, #0000 0 70%, rgb(0 0 0/75%) 0) 50%/100% 8%;
+		background-repeat: no-repeat;
+		animation: l23 0.6s infinite steps(12);
+	}
+	.loader2::before,
+	.loader2::after {
+		content: '';
+		grid-area: 1/1;
+		border-radius: 50%;
+		background: inherit;
+		opacity: 0.915;
+		transform: rotate(30deg);
+	}
+	.loader2::after {
+		opacity: 0.83;
+		transform: rotate(60deg);
+	}
+	@keyframes l23 {
+		100% {
+			transform: rotate(1turn);
+		}
+	}
+
+	.centerpage::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: linear-gradient(
+			90deg,
+			rgb(36, 4, 48) 0%,
+			rgba(0, 0, 0, 1) 50%,
+			rgb(1, 26, 24) 100%
+		);
+		z-index: -2;
+	}
+
+	.centerpage::after {
+		content: '';
+		position: absolute;
+		top: -300%;
+		left: -300%;
+		width: 600%;
+		height: 600%;
+		background-image: url('/images/bgminitr2.png');
+		background-repeat: repeat;
+		background-size: 121px 51px;
+		transform: rotate(45deg);
+		transform-origin: center;
+		z-index: -1;
 	}
 </style>
