@@ -230,7 +230,7 @@
 
 	.wholepage {
 		height: 100dvh;
-		width: min(100dvw, 750px);
+		width: min(100dvw, 900px);
 		box-sizing: border-box;
 		display: flex;
 		flex-direction: column;
@@ -242,6 +242,43 @@
 			rgba(0, 0, 0, 0.12) 0px 4px 6px,
 			rgba(0, 0, 0, 0.17) 0px 12px 13px,
 			rgba(0, 0, 0, 0.09) 0px -3px 5px;
+	}
+
+	@media (max-width: 900px) {
+		.wholepage {
+			background: rgba(236, 241, 243, 0.8);
+		}
+	}
+
+	.centerpage::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: linear-gradient(
+			90deg,
+			rgb(36, 4, 48) 0%,
+			rgba(0, 0, 0, 1) 50%,
+			rgb(1, 26, 24) 100%
+		);
+		z-index: -2;
+	}
+
+	.centerpage::after {
+		content: '';
+		position: absolute;
+		top: -300%;
+		left: -300%;
+		width: 600%;
+		height: 600%;
+		background-image: url('/images/bgminitr2.png');
+		background-repeat: repeat;
+		background-size: 121px 51px;
+		transform: rotate(45deg);
+		transform-origin: center;
+		z-index: -1;
 	}
 
 	.innercontent {
@@ -435,34 +472,4 @@
 		}
 	}
 
-	.centerpage::before {
-		content: '';
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		background: linear-gradient(
-			90deg,
-			rgb(36, 4, 48) 0%,
-			rgba(0, 0, 0, 1) 50%,
-			rgb(1, 26, 24) 100%
-		);
-		z-index: -2;
-	}
-
-	.centerpage::after {
-		content: '';
-		position: absolute;
-		top: -300%;
-		left: -300%;
-		width: 600%;
-		height: 600%;
-		background-image: url('/images/bgminitr2.png');
-		background-repeat: repeat;
-		background-size: 121px 51px;
-		transform: rotate(45deg);
-		transform-origin: center;
-		z-index: -1;
-	}
 </style>
