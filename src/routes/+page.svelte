@@ -130,6 +130,9 @@
 
 <div class="centerpage">
 	<div class="wholepage">
+		<div class="loghead-log">
+			<b class="logheadtxt">i9 Fitness</b>
+		</div>
 		<div class="innercontent">
 			{#if loading}
 				<div class="loading" id="loader" style="display: none">
@@ -288,8 +291,6 @@
 		overflow-y: auto;
 		width: 100%;
 		align-items: center;
-		margin-bottom: -20px;
-		padding-bottom: 25px;
 	}
 
 	.verif.invis {
@@ -472,4 +473,19 @@
 		}
 	}
 
+	.loghead-log {
+		width: 100%;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+		background: white;
+		height: clamp(24px, 10dvw, 54px);
+		font-size: clamp(16px, 8dvw, 48px);
+		z-index: 6;
+	}
+	.logheadtxt {
+		user-select: none;
+		font-family: 'Fira Code', Courier, monospace;
+	}
 </style>
