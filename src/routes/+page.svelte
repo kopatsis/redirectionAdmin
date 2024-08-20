@@ -4,7 +4,6 @@
 		verifyPasswordResetCode,
 		checkActionCode,
 		applyActionCode,
-		signInWithEmailAndPassword
 	} from 'firebase/auth';
 	import { auth } from '$lib/firebase';
 	import { onMount } from 'svelte';
@@ -18,7 +17,6 @@
 	let loading = true;
 	let email = '';
 	let mode = '';
-	let modeVerified = false;
 
 	let password = '';
 	let confirmPassword = '';
@@ -31,54 +29,24 @@
 	let containsLetter = false;
 	let containsNumber = false;
 
-	function validateEmail(email) {
-		return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-	}
-
-	$: emailValid = validateEmail(email);
-
 	$: hasMinimumLength = password.length >= 10;
 	$: containsLetter = /[a-zA-Z]/.test(password);
 	$: containsNumber = /\d/.test(password);
 
 	$: isValidPassword = hasMinimumLength && containsLetter && containsNumber;
 
-	$: passwordsMatch = password === confirmPassword;
-
 	async function resetPassword() {
-		if (isValidPassword && passwordsMatch) {
+		if (isValidPassword) {
 			try {
 				processing = true;
 				await confirmPasswordReset(auth, oobCode, password);
 			} catch (error) {
 				message = `Failed to update password: ${error.message}`;
 			} finally {
-				try {
-					await signInWithEmailAndPassword(auth, email, password);
-
-					const user = auth.currentUser;
-					if (user) {
-						const idToken = await user.getIdToken(true);
-						const url = `${import.meta.env.VITE_ADMIN_URL}/resetdate`;
-
-						await fetch(url, {
-							method: 'PATCH',
-							headers: {
-								'Content-Type': 'application/json',
-								Authorization: `Bearer ${idToken}`
-							}
-						});
-
-						await auth.signOut();
-					}
-				} catch (err) {
-					console.error(err);
-				} finally {
-					message = 'Password successfully updated.';
-					password = '';
-					confirmPassword = '';
-					processing = false;
-				}
+				message = 'Password successfully updated.';
+				password = '';
+				confirmPassword = '';
+				processing = false;
 			}
 		}
 	}
@@ -131,7 +99,7 @@
 <div class="centerpage">
 	<div class="wholepage">
 		<div class="loghead-log">
-			<b class="logheadtxt">i9 Fitness</b>
+			<b class="logheadtxt">Shorten Track</b>
 		</div>
 		<div class="innercontent">
 			{#if loading}
@@ -144,17 +112,13 @@
 			{/if}
 			{#if noParams}
 				<h1 class="head">Hello, person</h1>
-				<div class="head">If you are looking for the actual i9 Admin Panel:</div>
-				<button class="submit"
-					><a href="https://seashell-app-t8qro.ondigitalocean.app">Admin Panel</a></button
-				>
+				<div class="head">If you are looking for the actual Shorten Track site:</div>
+				<button class="submit"><a href="https://shortentrack.com">Here</a></button>
 			{:else if verified}
 				<div class="logintxt head">You verified your email</div>
 				<div class="head">Yay!</div>
-				<div class="head">If you are looking for the Admin Panel:</div>
-				<button class="submit"
-					><a href="https://seashell-app-t8qro.ondigitalocean.app">Admin Panel</a></button
-				>
+				<div class="head">If you are looking for the Shorten Track site:</div>
+				<button class="submit"><a href="https://shortentrack.com">Here</a></button>
 			{:else if mainError}
 				<div class="head">Something went wrong :/ most likely your code is expired</div>
 			{:else}
@@ -188,23 +152,8 @@
 						{#if containsNumber}&check;{:else}&times;{/if} Password must contain at least one number
 					</div>
 
-					<div class="form-group">
-						<label class="hide" for="confirm-password">Confirm New Password:</label>
-						<input
-							id="confirm-password"
-							type="password"
-							bind:value={confirmPassword}
-							placeholder="Confirm Password"
-							required
-						/>
-					</div>
-
-					<div class="verif" class:invis={!isValidPassword || passwordsMatch}>
-						Passwords do not match
-					</div>
-
-					{#if isValidPassword && passwordsMatch}
-						<button class="submit" on:click|preventDefault={resetPassword}>Reset</button>
+					{#if isValidPassword}
+						<button class="submit" type="submit">Reset</button>
 						<div class="verif complete">Ready to submit!</div>
 					{:else}
 						<button class="submit" type="button">Reset</button>
