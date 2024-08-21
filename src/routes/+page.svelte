@@ -24,7 +24,6 @@
 	let processing = false;
 
 	let isValidPassword = false;
-	let passwordsMatch = false;
 	let hasMinimumLength = false;
 	let containsLetter = false;
 	let containsNumber = false;
