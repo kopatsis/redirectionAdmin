@@ -4,6 +4,7 @@
 		verifyPasswordResetCode,
 		checkActionCode,
 		applyActionCode,
+		signInWithEmailAndPassword,
 	} from 'firebase/auth';
 	import { auth } from '$lib/firebase';
 	import { onMount } from 'svelte';
@@ -19,9 +20,7 @@
 	let mode = '';
 
 	let password = '';
-	let confirmPassword = '';
 	let message = '';
-	let processing = false;
 
 	let isValidPassword = false;
 	let hasMinimumLength = false;
@@ -37,15 +36,41 @@
 	async function resetPassword() {
 		if (isValidPassword) {
 			try {
-				processing = true;
+				loading = true;
 				await confirmPasswordReset(auth, oobCode, password);
 			} catch (error) {
 				message = `Failed to update password: ${error.message}`;
 			} finally {
-				message = 'Password successfully updated.';
-				password = '';
-				confirmPassword = '';
-				processing = false;
+				try {
+					await signInWithEmailAndPassword(auth, email, password);
+
+					const user = auth.currentUser;
+					if (user) {
+						const idToken = await user.getIdToken(true);
+
+						let url = import.meta.env.VITE_PAY_URL
+						if (!url) {
+							url = "https://pay.shortentrack.com"
+						}
+						url += "/administrative/logout"
+
+						await fetch(url, {
+							method: 'POST',
+							headers: {
+								'Content-Type': 'application/json',
+								Authorization: `Bearer ${idToken}`
+							}
+						});
+
+						await auth.signOut();
+					}
+				} catch (err) {
+					console.error(err);
+				} finally {
+					message = 'Password successfully updated.';
+					password = '';
+					loading = false;
+				}
 			}
 		}
 	}
@@ -241,9 +266,9 @@
 		align-items: center;
 	}
 
-	.verif.invis {
+	/* .verif.invis {
 		visibility: hidden;
-	}
+	} */
 
 	.logintxt {
 		font-size: 36px;
