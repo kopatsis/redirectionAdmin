@@ -4,7 +4,7 @@
 		verifyPasswordResetCode,
 		checkActionCode,
 		applyActionCode,
-		signInWithEmailAndPassword,
+		signInWithEmailAndPassword
 	} from 'firebase/auth';
 	import { auth } from '$lib/firebase';
 	import { onMount } from 'svelte';
@@ -48,13 +48,20 @@
 					if (user) {
 						const idToken = await user.getIdToken(true);
 
-						let url = import.meta.env.VITE_PAY_URL
+						let url = import.meta.env.VITE_PAY_URL;
 						if (!url) {
-							url = "https://pay.shortentrack.com"
+							url = 'https://admin.shortentrack.com';
 						}
-						url += "/administrative/logout"
 
-						await fetch(url, {
+						await fetch(url + '/administrative/logout', {
+							method: 'POST',
+							headers: {
+								'Content-Type': 'application/json',
+								Authorization: `Bearer ${idToken}`
+							}
+						});
+
+						await fetch(url + '/haspassword', {
 							method: 'POST',
 							headers: {
 								'Content-Type': 'application/json',
@@ -87,10 +94,22 @@
 		}
 	}
 
+	function handleSignInRedirect(oobCode, apiKey, continueUrl) {
+		if (continueUrl && oobCode && apiKey) {
+			const redirectUrl = new URL(continueUrl);
+			redirectUrl.searchParams.set('oobCode', oobCode);
+			redirectUrl.searchParams.set('apiKey', apiKey);
+			redirectUrl.searchParams.set('mode', 'signIn');
+			window.location.replace(redirectUrl.toString());
+		} else {
+			mainError = 'Missing required parameters for sign-in.';
+			loading = false;
+		}
+	}
+
 	onMount(async () => {
 		oobCode = new URLSearchParams(window.location.search).get('oobCode');
 		mode = new URLSearchParams(window.location.search).get('mode');
-		console.log(oobCode, mode);
 
 		if (!oobCode && !mode) {
 			noParams = true;
@@ -98,7 +117,7 @@
 			return;
 		}
 
-		if ((mode !== 'resetPassword' && mode !== 'verifyEmail') || !oobCode) {
+		if ((mode !== 'resetPassword' && mode !== 'verifyEmail' && mode !== 'signIn') || !oobCode) {
 			mainError = 'wrong params';
 			loading = false;
 			return;
@@ -106,7 +125,7 @@
 
 		if (mode === 'verifyEmail') {
 			verifyEmail();
-		} else {
+		} else if (mode === 'resetPassword') {
 			try {
 				const em = await verifyPasswordResetCode(auth, oobCode);
 				console.log(email);
@@ -116,6 +135,10 @@
 			} finally {
 				loading = false;
 			}
+		} else if (mode === 'signIn') {
+			const continueUrl = new URLSearchParams(window.location.search).get('continueUrl');
+			const apiKey = new URLSearchParams(window.location.search).get('apiKey');
+			handleSignInRedirect(oobCode, apiKey, continueUrl);
 		}
 	});
 </script>
